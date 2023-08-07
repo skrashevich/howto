@@ -21,12 +21,7 @@ type OpenAiResponse struct {
 }
 
 type Choice struct {
-	Message Message `json:"message"`
-}
-
-type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Text string `json:"text"`
 }
 
 type HowtoConfig struct {
@@ -46,9 +41,9 @@ type HowToState struct {
 	LastWarning time.Time        `json:"lastWarning"`
 }
 
-const VERSION = "1.2.1-svk-chatgpt"
+const VERSION = "1.1.0-dev"
 const DEFAULT_CONFIG = `{
-	"model": "gpt-3.5-turbo",
+	"model": "text-davinci-002",
 	"shell": "bash",
 	"max_tokens": 256
 }`
@@ -63,8 +58,6 @@ func getConfigPath() string {
 
 func getConfig() (HowtoConfig, error) {
 	var config HowtoConfig
-
-	json.Unmarshal([]byte(DEFAULT_CONFIG), &config)
 
 	configPath := getConfigPath()
 	_, err := os.Stat(configPath)
@@ -201,15 +194,6 @@ func main() {
 		printEnvInfo()
 		return
 	}
-	debug := false
-	if os.Args[1] == "--debug" {
-		debug = true
-	}
-
-	if os.Args[1] == "--version" {
-		fmt.Println("Howto version: " + VERSION)
-		os.Exit(0)
-	}
 
 	_, err := os.Stat(getConfigPath())
 	if os.IsNotExist(err) {
@@ -230,25 +214,22 @@ func main() {
 
 	input := strings.Join(os.Args[1:], " ")
 
-	if debug {
-		input = strings.Join(os.Args[2:], " ")
-	}
-
 	// prompt example: "bash command to tar file without compression: ```[insert]```"
-
-	sprompt := "I want you to act as an IT Expert. I will provide you with short information needed about my technical problem, and your role is to solve my problem. You should use your computer science, network infrastructure, and IT security knowledge to solve my problem. I want you to reply with the short solution, not write any explanations. Don't use markdown. Format your answer to looks good in the terminal window."
-	prompt := fmt.Sprintf("My first problem is: write %s command to %s: ", config.Shell, input)
+	prompt := fmt.Sprintf("%s command to %s:```", config.Shell, input)
 	suffix := "```"
 
 	body := []byte(fmt.Sprintf(`{
 		"model": "%s",
-		"messages":[{"role":"system","content":"%s"},{"role":"user","content":"%s"}],
-		"temperature": 0.5,
+		"prompt": "%s",
+		"suffix": "%s",
+		"temperature": 0,
 		"max_tokens": %d,
-		"stream": false
-	}`, config.Model, sprompt, prompt, config.MaxTokens))
+		"top_p": 1,
+		"frequency_penalty": 0,
+		"presence_penalty": 0
+	}`, config.Model, prompt, suffix, config.MaxTokens))
 
-	req, err := http.NewRequest("POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", "https://api.openai.com/v1/completions", bytes.NewBuffer(body))
 	if err != nil {
 		fmt.Println("Error creating request: ", err)
 		os.Exit(1)
@@ -266,10 +247,6 @@ func main() {
 
 	defer resp.Body.Close()
 
-	if debug {
-		fmt.Println("Request body: ", string(body))
-	}
-
 	var openaiResponse OpenAiResponse
 	err = json.NewDecoder(resp.Body).Decode(&openaiResponse)
 	if err != nil {
@@ -281,17 +258,15 @@ func main() {
 	if len(choices) == 0 {
 		fmt.Println("OpenAI API disn't respont correctly. Did you correctly set OPENAI_API_KEY?")
 		// more info about the response
-		fmt.Println("Request body: ", string(body))
+		fmt.Println("Response body: ", string(body))
 		fmt.Println("Response: ", resp)
 		os.Exit(1)
 	}
 
-	command := openaiResponse.Choices[0].Message.Content
+	command := openaiResponse.Choices[0].Text
 	// if "```" in command, cut out everything after it
 	if index := strings.Index(command, suffix); index != -1 {
-		if index2 := strings.LastIndex(command, suffix); index2 != -1 {
-			command = command[index+len(suffix) : index2]
-		}
+		command = command[:index]
 	}
 	command = strings.Trim(command, "\n")
 
