@@ -1,5 +1,5 @@
 # Howto
-Howto is a GPT-3/Codex-powered shell tool that allows you to talk with your shell in natural language.
+Howto is a GPT-4/Codex-powered shell tool that allows you to talk with your shell in natural language.
 
 
 [![Howto demo](https://user-images.githubusercontent.com/2821124/197363019-b038d31e-fde0-45a5-b347-3e87e0c260a6.gif)](https://youtu.be/VwP9eZdTrGY)
@@ -28,14 +28,14 @@ Howto can also suggest how to be a nicer person
 alias please='sudo'
 ```
 
-It works by sending requests to [OpenAI API](http://openai.com/api/). Lookup [Environment Variables](https://github.com/Guitaricet/howto#environment-variables) section on how to set up the API key.
+It works by sending requests to [OpenAI API](http://openai.com/api/). Lookup [Environment Variables](https://github.com/skrashevich/howto#environment-variables) section on how to set up the API key.
 
 # Installation
 
 ## Two-liner
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Guitaricet/howto/main/scripts/get_latest.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/skrashevich/howto/main/scripts/get_latest.sh)"
 sudo mv howto /usr/local/bin/  # howto.exe on windows
 ```
 
@@ -45,12 +45,12 @@ When first calling `howto` it will ask you to set up the API key. Get your OpenA
 
 | OS | Architecture | Link |
 | --- | --- | --- |
-| Linux | x86_64 | [howto-linux-x86_64](https://github.com/Guitaricet/howto/releases/download/v2.0.1/howto-v2.0.1-linux-386.tar.gz) |
-| MacOS | x86_64 (Intel) | [howto-darwin-x86_64](https://github.com/Guitaricet/howto/releases/download/v2.0.1/howto-v2.0.1-darwin-amd64.tar.gz) |
-| MacOS | arm64 (M1) | [howto-darwin-arm64](https://github.com/Guitaricet/howto/releases/download/v2.0.1/howto-v2.0.1-darwin-arm64.tar.gz) |
-| Windows | x86_64 | [howto-windows-x86_64](https://github.com/Guitaricet/howto/releases/download/v2.0.1/howto-v2.0.1-windows-amd64.zip) |
+| Linux | x86_64 | [howto-linux-x86_64](https://github.com/skrashevich/howto/releases/download/v2.0.1/howto-v2.0.1-linux-386.tar.gz) |
+| MacOS | x86_64 (Intel) | [howto-darwin-x86_64](https://github.com/skrashevich/howto/releases/download/v2.0.1/howto-v2.0.1-darwin-amd64.tar.gz) |
+| MacOS | arm64 (M1) | [howto-darwin-arm64](https://github.com/skrashevich/howto/releases/download/v2.0.1/howto-v2.0.1-darwin-arm64.tar.gz) |
+| Windows | x86_64 | [howto-windows-x86_64](https://github.com/skrashevich/howto/releases/download/v2.0.1/howto-v2.0.1-windows-amd64.zip) |
 
-Full list of architectures can be found on the [release page](https://github.com/Guitaricet/howto/releases/latest).
+Full list of architectures can be found on the [release page](https://github.com/skrashevich/howto/releases/latest).
 
 Then untar it and add it to your `PATH`. For example:
 ```bash

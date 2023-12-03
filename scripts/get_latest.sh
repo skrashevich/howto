@@ -23,15 +23,15 @@ else
 fi
 
 # Query GitHub API for the latest release
-LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/Guitaricet/howto/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+LATEST_RELEASE=$(curl --silent "https://api.github.com/repos/skrashevich/howto/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 # Download and install the correct binary
 if [[ $PLATFORM == "windows" ]]; then
-    URL="https://github.com/Guitaricet/howto/releases/download/$LATEST_RELEASE/howto-$LATEST_RELEASE-$PLATFORM-$ARCH.zip"
+    URL="https://github.com/skrashevich/howto/releases/download/$LATEST_RELEASE/howto-$LATEST_RELEASE-$PLATFORM-$ARCH.zip"
     curl -L $URL -o howto.zip
     unzip howto.zip
 else
-    URL="https://github.com/Guitaricet/howto/releases/download/$LATEST_RELEASE/howto-$LATEST_RELEASE-$PLATFORM-$ARCH.tar.gz"
+    URL="https://github.com/skrashevich/howto/releases/download/$LATEST_RELEASE/howto-$LATEST_RELEASE-$PLATFORM-$ARCH.tar.gz"
     curl -L $URL | tar xz
 fi
 

@@ -7,10 +7,11 @@ import (
 	"strings"
 	"time"
 
-	howto "github.com/guitaricet/howto/pkg"
+	"github.com/charmbracelet/glamour"
+	howto "github.com/skrashevich/howto/pkg"
 )
 
-const VERSION = "2.0.2"
+const VERSION = "2.0.2-svk"
 
 func main() {
 	flag.Usage = func() {
@@ -76,6 +77,9 @@ func main() {
 	if len(command) == 0 {
 		fmt.Println("Generated command is empty. Please try to rephrase your prompt.")
 	}
+	r, _ := glamour.NewTermRenderer(glamour.WithWordWrap(40), glamour.WithEmoji(), glamour.WithAutoStyle())
 
-	fmt.Println(command)
+	command2, err := r.Render(command)
+
+	fmt.Println(command2)
 }

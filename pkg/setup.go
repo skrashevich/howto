@@ -36,7 +36,7 @@ func Setup(version string) error {
 	configDir := filepath.Dir(configPath)
 	if err := os.MkdirAll(configDir, os.ModePerm); err != nil {
 		fmt.Println("Error creating config directory: " + err.Error())
-		fmt.Println("This should never happen. Please report this bug at https://github.com/guitaricet/howto/issues")
+		fmt.Println("This should never happen. Please report this bug at https://github.com/skrashevich/howto/issues")
 		fmt.Println("Please include the following information:")
 		fmt.Println("OS: " + runtime.GOOS)
 		fmt.Println("Config path: " + configPath)
@@ -83,22 +83,23 @@ func Setup(version string) error {
 	}
 
 	model := AskQuestion(QuestionOptions{
-		Question:        "What model do you want to use? (default: gpt-3.5-turbo) ",
+		Question:        "What model do you want to use? (default: gpt-4-1106-preview) ",
 		ValidationRegex: "",
 		Secure:          false,
 	})
 	if model == "" {
-		model = "gpt-3.5-turbo"
+		model = "gpt-4-1106-preview"
 	}
 
 	if runtime.GOOS == "darwin" {
 		SetOpenAiApiKey(openai_api_key)
+		shell = "zsh"
 	}
 	config := HowtoConfig{
 		Version:       version,
 		Model:         model,
 		Shell:         shell,
-		MaxTokens:     512,
+		MaxTokens:     2048,
 		SystemMessage: DEFAULT_SYSTEM_MESSAGE,
 	}
 

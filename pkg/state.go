@@ -26,7 +26,7 @@ func InitializeState() error {
 	stateDir := filepath.Dir(statePath)
 	if err := os.MkdirAll(stateDir, os.ModePerm); err != nil {
 		fmt.Println("Error creating state directory: " + err.Error())
-		fmt.Println("This should never happen. Please report this bug at https://github.com/guitaricet/howto/issues")
+		fmt.Println("This should never happen. Please report this bug at https://github.com/skrashevich/howto/issues")
 		fmt.Println("Please include the following information:")
 		fmt.Println("OS: " + runtime.GOOS)
 		fmt.Println("State path: " + statePath)
